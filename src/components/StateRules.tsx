@@ -1,26 +1,25 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 // 🔬 UNDERSTANDING STATE BEHAVIOR
 
 function StateRules() {
-  const [renderCount, setRenderCount] = useState(0)
   const [message, setMessage] = useState('Initial state')
   const [previousValue, setPreviousValue] = useState('')
-
-  // This runs after every render
+  const renderCountRef = useRef(0)  // ✅ Use ref instead for render counting
+  
+  // ✅ FIXED: This runs only when message changes
   useEffect(() => {
-    setRenderCount(prev => prev + 1)
-  })
+    renderCountRef.current += 1
+  }, [message]) // 🎯 Dependency array - only run when message changes
 
   const updateMessage = () => {
     setPreviousValue(message) // Store current value
     setMessage(`Updated at ${new Date().toLocaleTimeString()}`)
   }
-
   const resetState = () => {
     setMessage('Initial state')
     setPreviousValue('')
-    setRenderCount(0)
+    renderCountRef.current = 0  // ✅ Reset ref counter
   }
 
   // ❌ WRONG WAY - Never mutate state directly
@@ -40,7 +39,7 @@ function StateRules() {
       
       <div style={{ marginBottom: '15px', padding: '10px', backgroundColor: '#fef2f2', borderRadius: '5px' }}>
         <h4>📊 State Tracking</h4>
-        <p>Render Count: <strong>{renderCount}</strong></p>
+        <p>Render Count: <strong>{renderCountRef.current}</strong></p>
         <p>Current Message: <strong>{message}</strong></p>
         <p>Previous Message: <strong>{previousValue || 'None'}</strong></p>
       </div>
@@ -67,8 +66,17 @@ function StateRules() {
           <li>✅ <strong>Always use setState:</strong> setMessage('new value')</li>
           <li>✅ <strong>State is immutable:</strong> Don't modify state directly</li>
           <li>✅ <strong>Async updates:</strong> State updates may be batched</li>
-          <li>✅ <strong>Triggers re-render:</strong> Component re-renders when state changes</li>
-          <li>✅ <strong>Functional updates:</strong> Use prev value: setState(prev =&gt; prev + 1)</li>
+          <li>✅ <strong>Triggers re-render:</strong> Component re-renders when state changes</li>          <li>✅ <strong>Functional updates:</strong> Use prev value: setState(prev =&gt; prev + 1)</li>
+          <li>🆕 <strong>useEffect dependencies:</strong> Control when effects run</li>
+        </ul>
+      </div>
+
+      <div style={{ padding: '10px', backgroundColor: '#f0fdf4', borderRadius: '5px', fontSize: '14px', marginTop: '10px' }}>
+        <h4>🔄 useEffect Patterns:</h4>
+        <ul>
+          <li>❌ <code>useEffect(() =&gt; {})</code> - Runs after every render (infinite loop risk)</li>
+          <li>✅ <code>useEffect(() =&gt; {}, [])</code> - Runs only once (on mount)</li>
+          <li>✅ <code>useEffect(() =&gt; {}, [state])</code> - Runs when state changes</li>
         </ul>
       </div>
     </div>

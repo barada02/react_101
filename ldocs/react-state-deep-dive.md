@@ -301,6 +301,114 @@ setCount(count + 1)
 setCount(prevCount => prevCount + 1)
 ```
 
+### 4. **Infinite Re-render Loops with useEffect**
+```tsx
+// ❌ Wrong - Creates infinite loop!
+useEffect(() => {
+  setCount(count + 1)  // This triggers re-render, which runs useEffect again
+})
+
+// ✅ Correct - Use dependency array
+useEffect(() => {
+  setCount(count + 1)
+}, [])  // Empty array = runs only once
+
+// ✅ Or use useRef for counters that don't need to trigger re-renders
+const renderCountRef = useRef(0)
+useEffect(() => {
+  renderCountRef.current += 1  // Doesn't trigger re-render
+}, [message])  // Only runs when message changes
+```
+
+---
+
+## 🔄 useEffect and State Interactions
+
+### Understanding useEffect Dependency Arrays
+
+```tsx
+// ❌ No dependency array - Runs after EVERY render (dangerous!)
+useEffect(() => {
+  console.log('This runs after every render')
+  setCount(count + 1)  // ⚠️ Creates infinite loop!
+})
+
+// ✅ Empty dependency array - Runs ONCE (on mount)
+useEffect(() => {
+  console.log('This runs only once when component mounts')
+  fetchUserData()  // Perfect for initial data loading
+}, [])
+
+// ✅ With dependencies - Runs when specific values change
+useEffect(() => {
+  console.log('Message changed:', message)
+  saveToLocalStorage(message)
+}, [message])  // Only runs when message changes
+
+// ✅ Multiple dependencies
+useEffect(() => {
+  console.log('Count or name changed')
+  updateAnalytics(count, name)
+}, [count, name])  // Runs when count OR name changes
+```
+
+### Common useEffect Patterns
+
+#### 1. **Avoiding Infinite Loops**
+```tsx
+// ❌ This creates infinite re-renders
+function BadComponent() {
+  const [count, setCount] = useState(0)
+  
+  useEffect(() => {
+    setCount(count + 1)  // Changes state → triggers re-render → runs useEffect again
+  })  // No dependency array = runs after every render
+  
+  return <div>Count: {count}</div>  // Will keep incrementing forever!
+}
+
+// ✅ Fixed version
+function GoodComponent() {
+  const [count, setCount] = useState(0)
+  const renderCountRef = useRef(0)
+  
+  useEffect(() => {
+    renderCountRef.current += 1  // useRef doesn't trigger re-renders
+  }, [count])  // Only runs when count actually changes
+  
+  return (
+    <div>
+      Count: {count}
+      <br />
+      Renders: {renderCountRef.current}
+    </div>
+  )
+}
+```
+
+#### 2. **Conditional Effect Execution**
+```tsx
+useEffect(() => {
+  if (user.isLoggedIn) {
+    fetchUserProfile()
+  }
+}, [user.isLoggedIn])  // Only run when login status changes
+```
+
+#### 3. **Cleanup with useEffect**
+```tsx
+useEffect(() => {
+  const timer = setInterval(() => {
+    setCount(prev => prev + 1)
+  }, 1000)
+  
+  // Cleanup function
+  return () => {
+    clearInterval(timer)
+  }
+}, [])  // Empty array = setup once, cleanup on unmount
+```
+
 ---
 
 ## 🎯 Best Practices
@@ -404,7 +512,32 @@ setUsers(prev =>
   )
 )
 ```
-
+App.tsx:
+```tsx
+function App() {
+  return (
+    <div className="app-container">
+      <h1>React State Deep Dive �</h1>
+      <p>Understanding State Management in Detail</p>
+      
+      {/* Comprehensive State Examples */}
+      <StateExamples />
+      
+      {/* State Rules and Behavior */}
+      <StateRules />
+      
+      <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f3f4f6', borderRadius: '8px' }}>
+        <h3>🎯 Key Takeaways:</h3>
+        <ul>
+          <li><strong>State is local:</strong> Each component manages its own state</li>
+          <li><strong>Immutable:</strong> Never modify state directly, always use setState</li>
+          <li><strong>Reactive:</strong> State changes trigger component re-renders</li>
+          <li><strong>Flexible:</strong> Can store numbers, strings, booleans, objects, arrays</li>
+        </ul>
+      </div>
+    </div>
+  )
+}
 ---
 
 ## 🎯 Key Takeaways
@@ -416,6 +549,8 @@ setUsers(prev =>
 4. **Use functional updates** - When new state depends on old state
 5. **Keep state simple** - Break complex state into smaller pieces
 6. **Initialize properly** - Use correct initial values and types
+7. **Control useEffect** - Always use dependency arrays to avoid infinite loops
+8. **Use useRef for non-rendering data** - Like counters or timers that don't need to trigger re-renders
 
 ### 🎮 Practice with Your App:
 - Try all the interactive examples in StateExamples component
