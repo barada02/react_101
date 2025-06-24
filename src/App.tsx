@@ -1,32 +1,12 @@
 import './App.css'
-import { Component } from 'react'
-
-// 🎯 FUNCTIONAL COMPONENT (Modern React Way)
-function WelcomeMessage() {
-  return (
-    <div>
-      <h2>Hello from Functional Component! 👋</h2>
-      <p>I'm simple and modern</p>
-    </div>
-  )
-}
-
-// 🏗️ CLASS COMPONENT (Traditional React Way)
-class GreetingMessage extends Component {
-  render() {
-    return (
-      <div>
-        <h2>Hello from Class Component! 🎓</h2>
-        <p>I'm traditional but still works</p>
-      </div>
-    )
-  }
-}
+import WelcomeMessage from './components/WelcomeMessage'
+import GreetingMessage from './components/GreetingMessage'
 
 function App() {
   return (
     <div className="app-container">
       <h1>React Components Comparison 🚀</h1>
+      <p>App() is also a functional component!</p>
       
       {/* Using Functional Component */}
       <WelcomeMessage />
