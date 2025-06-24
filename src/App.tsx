@@ -1,24 +1,27 @@
 import './App.css'
-import UserCard from './components/UserCard'
-import Counter from './components/Counter'
+import StateExamples from './components/StateExamples'
+import StateRules from './components/StateRules'
 
 function App() {
   return (
     <div className="app-container">
-      <h1>Props vs State Example 🚀</h1>
-      <p>Understanding the difference between Props and State</p>
+      <h1>React State Deep Dive �</h1>
+      <p>Understanding State Management in Detail</p>
       
-      {/* PROPS EXAMPLE - Passing data TO components */}
-      <UserCard name="Alice" age={25} city="New York" />
-      <UserCard name="Bob" age={30} city="London" />
+      {/* Comprehensive State Examples */}
+      <StateExamples />
       
-      {/* STATE EXAMPLE - Component manages its own data */}
-      <Counter />
-      <Counter />
+      {/* State Rules and Behavior */}
+      <StateRules />
       
       <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f3f4f6', borderRadius: '8px' }}>
-        <p><strong>📥 Props:</strong> Data passed FROM parent TO child components</p>
-        <p><strong>🔄 State:</strong> Data managed WITHIN a component that can change</p>
+        <h3>🎯 Key Takeaways:</h3>
+        <ul>
+          <li><strong>State is local:</strong> Each component manages its own state</li>
+          <li><strong>Immutable:</strong> Never modify state directly, always use setState</li>
+          <li><strong>Reactive:</strong> State changes trigger component re-renders</li>
+          <li><strong>Flexible:</strong> Can store numbers, strings, booleans, objects, arrays</li>
+        </ul>
       </div>
     </div>
   )
