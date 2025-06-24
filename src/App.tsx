@@ -1,26 +1,23 @@
 import './App.css'
-import StateExamples from './components/StateExamples'
-import StateRules from './components/StateRules'
+import HooksExample from './components/HooksExample'
 
 function App() {
   return (
     <div className="app-container">
-      <h1>React State Deep Dive �</h1>
-      <p>Understanding State Management in Detail</p>
+      <h1>React Hooks Deep Dive 🎣</h1>
+      <p>Understanding useState and useEffect working together</p>
       
-      {/* Comprehensive State Examples */}
-      <StateExamples />
-      
-      {/* State Rules and Behavior */}
-      <StateRules />
+      {/* Comprehensive Hooks Example */}
+      <HooksExample />
       
       <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f3f4f6', borderRadius: '8px' }}>
-        <h3>🎯 Key Takeaways:</h3>
+        <h3>🎯 Key Learning Points:</h3>
         <ul>
-          <li><strong>State is local:</strong> Each component manages its own state</li>
-          <li><strong>Immutable:</strong> Never modify state directly, always use setState</li>
-          <li><strong>Reactive:</strong> State changes trigger component re-renders</li>
-          <li><strong>Flexible:</strong> Can store numbers, strings, booleans, objects, arrays</li>
+          <li><strong>useState:</strong> Manages component state that can change</li>
+          <li><strong>useEffect:</strong> Handles side effects and lifecycle events</li>
+          <li><strong>Dependencies:</strong> Control when effects run with dependency arrays</li>
+          <li><strong>Cleanup:</strong> Return functions from useEffect for cleanup</li>
+          <li><strong>Together:</strong> State changes can trigger effects, effects can update state</li>
         </ul>
       </div>
     </div>
